@@ -17,7 +17,7 @@ const Home = () => {
 
       <p className={styles.description}>
         Reaktor Developer (summer 2021) pre-assignment. 
-        Source code <a href="https://github.com/Luukuton/warehouse-reaktor-2021">here</a>.
+        Source code <a href="https://github.com/Luukuton/warehouse-reaktor2021">here</a>.
       </p>
 
     </Layout>

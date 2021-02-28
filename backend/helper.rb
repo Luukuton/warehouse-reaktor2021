@@ -35,7 +35,7 @@ class Helper
     # Gets the JSON data.
     # 
     # @param category [String] the name of the product category
-    # @return [JSON] the data
+    # @return [JSON] cached data
     def get_cache(category)
         @cache[category.to_sym][0]
     end
@@ -43,7 +43,7 @@ class Helper
     # Handles the respond. Returns nil if category doesn't exist.
     # 
     # @param category [String] the name of the product category
-    # @return [JSON] the data
+    # @return [JSON] cached data as JSON
     def handle_response(category)
         return nil unless CATEGORIES.include? category
         get_cache(category).to_json
@@ -52,7 +52,7 @@ class Helper
     # Parses JSON to Hash
     # 
     # @param json [String] JSON representation
-    # @return true if product type and false if availability/status type
+    # @return [Boolean] true if product type and false if availability/status type
     def json_to_hash(json, product)
         hash = Hash.new
         if product
@@ -75,7 +75,7 @@ class Helper
         hash
     end
 
-    # Gets and parses responses from the Bad API
+    # Gets and parses responses from the *Bad* API
     def parse_responses()
         responses = {}
         CATEGORIES.each do |c|
@@ -117,7 +117,7 @@ class Helper
     
     # Gets all unique manufacturers from given lists
     # 
-    # @param product_lists [Hash] product lists
+    # @param product_lists [Hash] lists of products
     # @return [Array] an array of manufacturer names as Strings
     def get_manufacturers(product_lists)
         manufacturers = []
@@ -133,7 +133,7 @@ class Helper
     # Gets the respond with error checks
     #
     # @param url [String] URL where to get the response
-    # @param product [Hash] product lists
+    # @param product [Boolean]  true if product type and false if availability/status type
     # @return [String] response
     def get_response(url, product)
         response = Net::HTTP.get(URI(url))
