@@ -42,6 +42,5 @@ The default backend URL can be changed in [.env.local](frontend/.env.local).
 
 ## Something to improve 
 
-- Home page flashes white when the dark theme is active
 - Improve or change [VirtualScroller](https://www.npmjs.com/package/virtual-scroller) to something faster
 - More precise internal caching!

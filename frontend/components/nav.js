@@ -6,12 +6,12 @@ import categories from "../lib/categories"
 
 const Nav = () => {
   return <header className={styles.header}>
-    <a href="/" >🏠 Home</a>
-      {categories[1].map((category) => {
-        return <Link key={category} as={`/category/${category}`} href="/category/[slug]">
-          <a>{category.charAt(0).toUpperCase() + category.slice(1)}</a>
-        </Link>
-      })}
+    <Link as={`/`} href="/">🏠 Home</Link>
+    {categories[1].map((category) => {
+      return <Link key={category} as={`/category/${category}`} href="/category/[slug]">
+        <a>{category.charAt(0).toUpperCase() + category.slice(1)}</a>
+      </Link>
+    })}
   </header>
   
 }
