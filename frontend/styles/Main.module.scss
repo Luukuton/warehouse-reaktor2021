@@ -1,0 +1,84 @@
+.container {
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  padding: 0 0;
+  margin: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  height: 100px;
+  border-bottom: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header > a {
+  padding: 0 10px;
+}
+
+.footer {
+  width: 50vw;
+  height: 100px;
+  border-top: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer img {
+  margin-left: 0.5rem;
+}
+
+.footer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title a, .description a {
+  color: #0070f3;
+  text-decoration: none;
+}
+
+.title a:hover,
+.title a:focus,
+.title a:active,
+.header a:hover,
+.header a:focus,
+.header a:active {
+  text-decoration: underline;
+}
+
+.title {
+  margin: 0;
+  padding-top: 50px;
+  line-height: 1.15;
+  font-size: 4rem;
+}
+
+.title,
+.description {
+  text-align: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.description {
+  line-height: 1.5;
+  font-size: 1.5rem;
+  margin-bottom: 200px;
+}

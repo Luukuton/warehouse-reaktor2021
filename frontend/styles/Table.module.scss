@@ -1,0 +1,73 @@
+.rTable {
+  display: table;
+  word-break: keep-all;
+  border-collapse: collapse;
+}
+
+.rTableRow {
+  width: 100%;
+  display: table-row;
+}
+
+.rTableHead {
+  width: 100vw;
+  display: table-cell;
+  padding: 5px 10px;
+  font-size: 1.2em;
+  border-bottom: 1px solid;
+}
+
+.rTableCell {
+  word-break: break-word;
+  display: table-cell;
+  padding: 5px 10px;
+  border-right: 1px solid;
+}
+
+.rTableRow:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.rTableRow:nth-child(odd) {
+  background-color: rgb(0, 0, 0, 0.3);
+}
+
+.rTableHeading, .rTableFoot, .rTableHeading {
+  display: table-header-group;
+}
+
+.rTableBody, .rTableBody > .div {
+  display: table-row-group;
+}
+
+.rTableCell:nth-child(1), .rTableHead:nth-child(1) {
+  width: 30vw;
+  text-align: left;
+}
+.rTableCell:nth-child(2), .rTableHead:nth-child(2) {
+  word-break: normal;
+  width: 20vw;
+  text-align: center;
+}
+.rTableCell:nth-child(3), .rTableHead:nth-child(3) {
+  word-break: normal;
+  width: 10vw;
+  text-align: center;
+}
+.rTableCell:nth-child(4), .rTableHead:nth-child(4) {
+  width: 20vw;
+  text-align: center;
+}
+.rTableCell:nth-child(5), .rTableHead:nth-child(5) {
+  width: 20vw;
+  text-align: center;
+}
+
+@media (max-width: 800px) {
+  .rTable {
+    font-size: 1em;
+  }
+  .rTableRow {
+    font-size: 0.66em;
+  }
+}
