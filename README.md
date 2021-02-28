@@ -10,11 +10,6 @@ A really simple local backend to make more sense of the [**Bad** API](https://ba
 
 The default port of the backend can be changed in [backend.rb](backend/backend.rb) by changing line: `set :port, 4567`,
 
-### Dependencies
-
-- nodejs v14.16.0+ (LTS)
-- npm latest (tested with 7.4.2)
-
 ### Installation & Usage
 
 1. `cd backend`
@@ -26,6 +21,7 @@ Running backend the first time can take up to 1-2 minutes depending on the conne
 ### Dependencies
 
 - Ruby 3.0+ (should work with Ruby 2.x as well)
+- Other web servers such as [Puma](https://github.com/puma/puma) work as well (default [Webrick](https://github.com/ruby/webrick))
 
 ## Frontend
 
@@ -39,6 +35,10 @@ The default backend URL can be changed in [.env.local](frontend/.env.local).
 2. Install dependencies: `npm install --force`
 3. Start with: `npm run build` & `npm run start` or just `npm run dev` for the development mode
 
+### Dependencies
+
+- nodejs v14.16.0+ (LTS)
+- npm latest (tested with 7.4.2)
 
 ## Something to improve 
 
