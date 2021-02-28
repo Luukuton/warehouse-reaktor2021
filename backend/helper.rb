@@ -12,14 +12,15 @@ class Helper
         @cache = Hash.new
 
         # Initial cache, can take some time (1-2min depending on the Bad API)
-        parse_responses
-        puts 'Ready to do! Frontend can now be built.'
+        puts 'Setting up cache..'
+        parse_responses(true)
+        puts 'Ready to go! Frontend can now be built.'
 
         # Refresing cache every minute
         Thread.new do
             loop do
                 sleep(60)
-                parse_responses
+                parse_responses(false)
             end
         end
     end
@@ -76,14 +77,16 @@ class Helper
     end
 
     # Gets and parses responses from the *Bad* API
-    def parse_responses()
+    #
+    # @param debug [Boolean] debug messages on or off
+    def parse_responses(debug)
+        puts "Refreshing cache.." if debug
+
         responses = {}
         CATEGORIES.each do |c|
             response = get_response(URL_API + PRODUCT_API + c, true)
             responses[c.to_sym] = json_to_hash(response, true)
         end
-
-        puts 'Setting up cache..'
         current = 0
 
         manufacturers = get_manufacturers(responses)
@@ -98,7 +101,7 @@ class Helper
             end
 
             # Current progress
-            puts "#{current += 1}/#{manufacturers.length} manufacturers: #{m}"
+            puts "#{current += 1}/#{manufacturers.length} manufacturers: #{m}" if debug
         end
         
         CATEGORIES.each do |c|
