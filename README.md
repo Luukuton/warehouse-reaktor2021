@@ -38,3 +38,10 @@ The default backend URL can be changed in [.env.local](frontend/.env.local).
 1. `cd frontend`
 2. Install dependencies: `npm install --force`
 3. Start with: `npm run build` & `npm run start` or just `npm run dev` for the development mode
+
+
+## Something to improve 
+
+- Home page flashes white when the dark theme is active
+- Improve or change [VirtualScroller](https://www.npmjs.com/package/virtual-scroller) to something faster
+- More precise internal caching!
