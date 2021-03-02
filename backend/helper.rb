@@ -133,19 +133,24 @@ class Helper
         manufacturers
     end
 
-    # Gets the respond with error checks
+    # Gets the response with error checks
     #
     # @param url [String] URL where to get the response
     # @param product [Boolean]  true if product type and false if availability/status type
     # @return [String] response
     def get_response(url, product)
-        response = Net::HTTP.get(URI(url))
-        json = product ? JSON.parse(response) : JSON.parse(response)['response']
+        json = '[]'
+        response = ""
+
         until json != '[]'
-            response = Net::HTTP.get(URI(url))
-            json = product ? JSON.parse(response) : JSON.parse(response)['response']
-            puts 'Built-in intentional failure. Trying again..'
+            begin
+                response = Net::HTTP.get(URI(url))
+                json = product ? JSON.parse(response) : JSON.parse(response)['response']
+            rescue JSON::ParserError
+            end
+            puts 'Built-in intentional failure. Trying again..' if json == '[]'
         end
+
         response
     end 
 end
