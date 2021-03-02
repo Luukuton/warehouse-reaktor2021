@@ -48,8 +48,8 @@ class Helper
   #
   # @param category [String] the name of the product category
   # @return [JSON] cached data as JSON
-  def handle_response(category) 
-    return nil unless CATEGORIES.include? category 
+  def handle_response(category)
+    return nil unless CATEGORIES.include? category
 
     get_cache(category).to_json
   end
@@ -61,7 +61,7 @@ class Helper
   def json_to_hash(json, product)
     hash = {}
     if product
-      JSON.parse(json).each do |p|
+      json.each do |p|
         hash[p['id'].downcase] = {
           type: p['type'],
           name: p['name'],
@@ -72,7 +72,7 @@ class Helper
         }
       end
     else
-      JSON.parse(json)['response'].each do |p|
+      json.each do |p|
         hash[p['id'].downcase] = p['DATAPAYLOAD'].match(%r{.*<INSTOCKVALUE>(.*)</INSTOCKVALUE>.*}i).captures[0]
       end
     end
@@ -88,14 +88,14 @@ class Helper
 
     responses = {}
     CATEGORIES.each do |c|
-      response = get_response(URL_API + PRODUCT_API + c, true)
+      response = get_response_as_json(URL_API + PRODUCT_API + c, true)
       responses[c.to_sym] = json_to_hash(response, true)
     end
     current = 0
 
     manufacturers = get_manufacturers(responses)
     manufacturers.each do |m|
-      response = get_response(URL_API + STATUS_API + m, false)
+      response = get_response_as_json(URL_API + STATUS_API + m, false)
       statuses = json_to_hash(response, false)
       responses.each_key do |category|
         products = responses[category]
@@ -146,20 +146,17 @@ class Helper
   # @param url [String] URL where to get the response
   # @param product [Boolean]  true if product type and false if availability/status type
   # @return [String] response
-  def get_response(url, product)
+  def get_response_as_json(url, product)
     json = '[]'
-    response = ''
-
     until json != '[]'
+      response = Net::HTTP.get(URI(url))
       begin
-        response = Net::HTTP.get(URI(url))
-        json = product ? JSON.parse(response) : JSON.parse(response)['response']
+        json = product ? JSON.parse(response, quirks_mode: true) : JSON.parse(response, quirks_mode: true)['response']
       rescue JSON::ParserError
         # Ignored
       end
       puts 'Built-in intentional failure. Trying again..' if json == '[]'
     end
-
-    response
+    json
   end
 end
