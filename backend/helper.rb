@@ -91,16 +91,16 @@ class Helper
       response = get_response_as_json(URL_API + PRODUCT_API + c, true)
       responses[c.to_sym] = json_to_hash(response, true)
     end
-    current = 0
 
+    current = 0
     manufacturers = get_manufacturers(responses)
     manufacturers.each do |m|
       response = get_response_as_json(URL_API + STATUS_API + m, false)
       statuses = json_to_hash(response, false)
-      responses.each_key do |category|
-        products = responses[category]
-        products.each_key do |id|
-          products[id][:status] = statuses[id] unless products[id].nil? || statuses[id].nil?
+
+      responses.each_key do |c|
+        responses[c].each_key do |id|
+          responses[c][id][:status] = statuses[id] unless responses[c][id].nil? || statuses[id].nil?
         end
       end
 
@@ -148,7 +148,8 @@ class Helper
   # @return [String] response
   def get_response_as_json(url, product)
     json = '[]'
-    until json != '[]'
+    response = ''
+    until json != '[]' && response.length > 3
       response = Net::HTTP.get(URI(url))
       begin
         json = product ? JSON.parse(response, quirks_mode: true) : JSON.parse(response, quirks_mode: true)['response']
