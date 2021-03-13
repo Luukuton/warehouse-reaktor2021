@@ -6,8 +6,8 @@ require 'net/http'
 # Helper class for the backend
 class Helper
   URL_API = 'https://bad-api-assignment.reaktor.com/v2/'
-  PRODUCT_API = 'products/'
-  STATUS_API = 'availability/'
+  PRODUCT_API = "#{URL_API}products/"
+  STATUS_API = "#{URL_API}availability/"
   CATEGORIES = %w[gloves facemasks beanies].freeze
 
   def initialize
@@ -19,7 +19,7 @@ class Helper
     parse_responses(true)
     puts 'Ready to go! Frontend can now be built.'
 
-    # Refresing cache every minute
+    # Refreshing cache every minute
     Thread.new do
       loop do
         sleep(60)
@@ -33,7 +33,8 @@ class Helper
   # @param category [Symbol] the name of the product category
   # @param products [String] filename of the reply file to the trigger
   def set_cache(category, products)
-    @cache[category] = [products, Time.now.to_i]
+    @cache[category] = [{ updated_at: Time.at(Time.now) }]
+    @cache[category] << products
   end
 
   # Gets the JSON data.
@@ -41,7 +42,7 @@ class Helper
   # @param category [String] the name of the product category
   # @return [JSON] cached data
   def get_cache(category)
-    @cache[category.to_sym][0]
+    @cache[category.to_sym]
   end
 
   # Handles the respond. Returns nil if category doesn't exist.
@@ -54,32 +55,6 @@ class Helper
     get_cache(category).to_json
   end
 
-  # Parses JSON to Hash
-  #
-  # @param json [String] JSON representation
-  # @return [Hash] products as a hash
-  def json_to_hash(json, product)
-    hash = {}
-    if product
-      json.each do |p|
-        hash[p['id'].downcase] = {
-          type: p['type'],
-          name: p['name'],
-          color: p['color'],
-          price: p['price'],
-          manufacturer: p['manufacturer'],
-          status: p['status']
-        }
-      end
-    else
-      json.each do |p|
-        hash[p['id'].downcase] = p['DATAPAYLOAD'].match(%r{.*<INSTOCKVALUE>(.*)</INSTOCKVALUE>.*}i).captures[0]
-      end
-    end
-
-    hash
-  end
-
   # Gets and parses responses from the *Bad* API
   #
   # @param debug [Boolean] debug messages on or off
@@ -88,14 +63,14 @@ class Helper
 
     responses = {}
     CATEGORIES.each do |c|
-      response = get_response_as_json(URL_API + PRODUCT_API + c, true)
+      response = get_response_as_json(PRODUCT_API + c, true, debug)
       responses[c.to_sym] = json_to_hash(response, true)
     end
 
     current = 0
     manufacturers = get_manufacturers(responses)
     manufacturers.each do |m|
-      response = get_response_as_json(URL_API + STATUS_API + m, false)
+      response = get_response_as_json(STATUS_API + m, false, debug)
       statuses = json_to_hash(response, false)
 
       responses.each_key do |c|
@@ -141,12 +116,13 @@ class Helper
     manufacturers
   end
 
-  # Gets the response with error checks
+  # Gets the response as JSON with error checks
   #
   # @param url [String] URL where to get the response
-  # @param product [Boolean]  true if product type and false if availability/status type
+  # @param product [Boolean] true if product type and false if availability/status type
+  # @param debug [Boolean] debug messages
   # @return [String] response
-  def get_response_as_json(url, product)
+  def get_response_as_json(url, product, debug)
     json = '[]'
     response = ''
     until json != '[]' && response.length > 3
@@ -156,8 +132,35 @@ class Helper
       rescue JSON::ParserError
         # Ignored
       end
-      puts 'Built-in intentional failure. Trying again..' if json == '[]'
+      puts 'Built-in intentional failure. Trying again..' if debug && json == '[]'
     end
     json
+  end
+
+  # Parses JSON to Hash
+  #
+  # @param json [String] JSON representation
+  # @param product [Boolean] if product (true) or status (false)
+  # @return [Hash] products as a hash
+  def json_to_hash(json, product)
+    hash = {}
+    if product
+      json.each do |p|
+        hash[p['id'].downcase] = {
+          type: p['type'],
+          name: p['name'],
+          color: p['color'],
+          price: p['price'],
+          manufacturer: p['manufacturer'],
+          status: p['status']
+        }
+      end
+    else
+      json.each do |p|
+        hash[p['id'].downcase] = p['DATAPAYLOAD'].match(%r{.*<INSTOCKVALUE>(.*)</INSTOCKVALUE>.*}i).captures[0]
+      end
+    end
+
+    hash
   end
 end

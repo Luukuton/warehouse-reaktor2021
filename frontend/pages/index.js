@@ -5,7 +5,7 @@ import Layout from "../components/layout"
 import styles from '../styles/Main.module.scss'
 
 const Home = () => {
-  return <React.Fragment>
+  return <>
     <Head>
       <title>Warehouse</title>
       <link rel="icon" href="/favicon.ico" />
@@ -21,7 +21,7 @@ const Home = () => {
       </p>
 
     </Layout>
-  </React.Fragment>
+  </>
   
 }
 

@@ -1,10 +1,17 @@
-# backend.rb
+# frozen_string_literal: true
+
 require 'sinatra'
 require_relative 'helper'
 
-set :port, 4567
+set :port, 4755
 
 helper = Helper.new
+
+get '/' do
+  '<a href="/gloves">Gloves JSON</a> </br>'\
+  '<a href="/facemasks">Facemasks JSON</a> </br>'\
+  '<a href="/beanies">Beanies JSON</a> </br>'
+end
 
 get '/:category' do
   content_type :json
